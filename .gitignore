@@ -1,0 +1,14 @@
+/DataLayer/obj/Debug/*.cache
+/DataLayer/obj/Release/*.cache
+*.cache
+/DataLayer/bin/Debug
+/DataLayer/bin/Release
+/DataLayer/obj/Debug
+/DataLayer/obj/Release
+/packages
+/Timeclock Client/bin/Debug
+/Timeclock Client/bin/Release
+/Timeclock Client/obj/Debug
+/Timeclock Client/obj/Release
+/web api server/bin
+/web api server/obj/Debug

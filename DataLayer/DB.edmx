@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TimeclockModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="entries">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="time_from" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="time_to" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="hours" Type="decimal" Precision="4" Scale="1" Nullable="false" />
+          <Property Name="job_number_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="work_type_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="comments" Type="varchar" MaxLength="500" />
+          <Property Name="user_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="job_numbers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="job_number" Type="varchar" MaxLength="50" />
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="user_id" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="email" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="department_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="token" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="work_types">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="work_type" Type="varchar" MaxLength="80" />
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="user_id" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="TimeclockModelStoreContainer">
+          <EntitySet Name="entries" EntityType="Self.entries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="job_numbers" EntityType="Self.job_numbers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="work_types" EntityType="Self.work_types" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TimeclockModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="TimeclockEntities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="job_numbers" EntityType="TimeclockModel.job_numbers" />
+          <EntitySet Name="work_types" EntityType="TimeclockModel.work_types" />
+          <EntitySet Name="entries" EntityType="TimeclockModel.entry" />
+          <AssociationSet Name="job_numbersentry" Association="TimeclockModel.job_numbersentry">
+            <End Role="job_numbers" EntitySet="job_numbers" />
+            <End Role="entry" EntitySet="entries" />
+          </AssociationSet>
+          <AssociationSet Name="work_typesentry" Association="TimeclockModel.work_typesentry">
+            <End Role="work_types" EntitySet="work_types" />
+            <End Role="entry" EntitySet="entries" />
+          </AssociationSet>
+          <EntitySet Name="users" EntityType="TimeclockModel.user" />
+          <AssociationSet Name="userentry" Association="TimeclockModel.userentry">
+            <End Role="user" EntitySet="users" />
+            <End Role="entry" EntitySet="entries" />
+          </AssociationSet>
+          <AssociationSet Name="userwork_types" Association="TimeclockModel.userwork_types">
+            <End Role="user" EntitySet="users" />
+            <End Role="work_types" EntitySet="work_types" />
+          </AssociationSet>
+          <AssociationSet Name="userjob_numbers" Association="TimeclockModel.userjob_numbers">
+            <End Role="user" EntitySet="users" />
+            <End Role="job_numbers" EntitySet="job_numbers" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="job_numbers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="job_number" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="entries" Relationship="TimeclockModel.job_numbersentry" FromRole="job_numbers" ToRole="entry" />
+          <Property Name="user_id" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="user" Relationship="TimeclockModel.userjob_numbers" FromRole="job_numbers" ToRole="user" />
+        </EntityType>
+        <EntityType Name="work_types">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="work_type" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="entries" Relationship="TimeclockModel.work_typesentry" FromRole="work_types" ToRole="entry" />
+          <Property Name="user_id" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="user" Relationship="TimeclockModel.userwork_types" FromRole="work_types" ToRole="user" />
+        </EntityType>
+        <EntityType Name="entry">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="time_from" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="time_to" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="hours" Type="Decimal" Nullable="false" Precision="4" Scale="1" />
+          <Property Name="job_number_id" Type="Guid" Nullable="false" />
+          <Property Name="work_type_id" Type="Guid" Nullable="false" />
+          <Property Name="comments" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="user_id" Type="Guid" Nullable="false" />
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="job_numbers" Relationship="TimeclockModel.job_numbersentry" FromRole="entry" ToRole="job_numbers" />
+          <NavigationProperty Name="work_types" Relationship="TimeclockModel.work_typesentry" FromRole="entry" ToRole="work_types" />
+          <NavigationProperty Name="user" Relationship="TimeclockModel.userentry" FromRole="entry" ToRole="user" />
+        </EntityType>
+        <Association Name="job_numbersentry">
+          <End Type="TimeclockModel.job_numbers" Role="job_numbers" Multiplicity="1" />
+          <End Type="TimeclockModel.entry" Role="entry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="job_numbers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="entry">
+              <PropertyRef Name="job_number_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="work_typesentry">
+          <End Type="TimeclockModel.work_types" Role="work_types" Multiplicity="1" />
+          <End Type="TimeclockModel.entry" Role="entry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="work_types">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="entry">
+              <PropertyRef Name="work_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="department_id" Type="Guid" Nullable="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="token" Type="Guid" Nullable="false" />
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="entries" Relationship="TimeclockModel.userentry" FromRole="user" ToRole="entry" />
+          <NavigationProperty Name="work_types" Relationship="TimeclockModel.userwork_types" FromRole="user" ToRole="work_types" />
+          <NavigationProperty Name="job_numbers" Relationship="TimeclockModel.userjob_numbers" FromRole="user" ToRole="job_numbers" />
+        </EntityType>
+        <Association Name="userentry">
+          <End Type="TimeclockModel.user" Role="user" Multiplicity="1" />
+          <End Type="TimeclockModel.entry" Role="entry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="entry">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="userwork_types">
+          <End Type="TimeclockModel.user" Role="user" Multiplicity="1" />
+          <End Type="TimeclockModel.work_types" Role="work_types" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="work_types">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="userjob_numbers">
+          <End Type="TimeclockModel.user" Role="user" Multiplicity="1" />
+          <End Type="TimeclockModel.job_numbers" Role="job_numbers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="job_numbers">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TimeclockModelStoreContainer" CdmEntityContainer="TimeclockEntities" >
+          <EntitySetMapping Name="job_numbers">
+            <EntityTypeMapping TypeName="TimeclockModel.job_numbers">
+              <MappingFragment StoreEntitySet="job_numbers">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="job_number" ColumnName="job_number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="work_types">
+            <EntityTypeMapping TypeName="TimeclockModel.work_types">
+              <MappingFragment StoreEntitySet="work_types">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="work_type" ColumnName="work_type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="entries">
+            <EntityTypeMapping TypeName="TimeclockModel.entry">
+              <MappingFragment StoreEntitySet="entries">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="comments" ColumnName="comments" />
+                <ScalarProperty Name="work_type_id" ColumnName="work_type_id" />
+                <ScalarProperty Name="job_number_id" ColumnName="job_number_id" />
+                <ScalarProperty Name="hours" ColumnName="hours" />
+                <ScalarProperty Name="time_to" ColumnName="time_to" />
+                <ScalarProperty Name="time_from" ColumnName="time_from" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="TimeclockModel.user">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="token" ColumnName="token" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="department_id" ColumnName="department_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="email" ColumnName="email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
