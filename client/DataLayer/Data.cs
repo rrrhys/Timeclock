@@ -82,18 +82,25 @@ namespace DataLayer
             }
         }
 
-        public void UpdateEntry(Guid entryToken, string comments)
+        public bool UpdateEntry(Guid entryToken, string comments, Guid user_token)
         {
             using (var context = new CWTimeclockEntities())
             {
-                var entry = context.entries.FirstOrDefault(e => e.id == entryToken);
+                var user = context.users.FirstOrDefault(u => u.token == user_token);
 
-                entry.time_to = DateTime.Now;
-                entry.comments = comments;
-                entry.hours = Convert.ToDecimal(Math.Round((entry.time_to - entry.time_from).TotalHours, 1));
-                context.SaveChanges();
+                if (user != null)
+                {
 
+                    var entry = context.entries.FirstOrDefault(e => e.id == entryToken && e.user_id == user.id);
+
+                    entry.time_to = DateTime.Now;
+                    entry.comments = comments;
+                    entry.hours = Convert.ToDecimal(Math.Round((entry.time_to - entry.time_from).TotalHours, 1));
+                    context.SaveChanges();
+                    return true;
+                }
             }
+            return false;
         }
         /// <summary>
         /// 

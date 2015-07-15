@@ -11,6 +11,6 @@ namespace DataLayer
         Guid? GetTokenForUser(string email, string password);
         job_numbers[] ListJobNumbers(Guid user_token);
         work_types[] ListWorkTypes(Guid user_token);
-        void UpdateEntry(Guid entryToken, string comments);
+        bool UpdateEntry(Guid entryToken, string comments, Guid user_token);
     }
 }

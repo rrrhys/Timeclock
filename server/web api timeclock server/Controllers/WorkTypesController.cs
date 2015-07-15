@@ -5,23 +5,23 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace web_api_timeclock_server.Controllers
 {
+    [EnableCors(origins: "http://www.jstesting.dev", headers: "*", methods: "*")]
     public class WorkTypesController : ApiController
     {
+        CWTimeclockEntities db = new CWTimeclockEntities();
         // GET api/worktypes
         public HttpResponseMessage Get(Guid user_token)
         {
-            using (var db = new CWTimeclockEntities())
-            {
                 var user = db.users.FirstOrDefault(u => u.token == user_token);
                 if(user != null){
                     var worktypes = db.work_types.Where(w => w.user_id == user.id).ToList();
                     return Request.CreateResponse(HttpStatusCode.OK, worktypes);
                 }
                 return Request.CreateResponse(HttpStatusCode.NotFound);
-            }
         }
 
         // GET api/worktypes/5
@@ -37,8 +37,6 @@ namespace web_api_timeclock_server.Controllers
             var work_type = Newtonsoft.Json.JsonConvert.DeserializeObject<work_types>(wrapper.payload.ToString());
             var user_token = wrapper.user_token;
 
-            using (var db = new CWTimeclockEntities())
-            {
                 var user = db.users.FirstOrDefault(u => u.token == user_token);
                 if (user != null)
                 {
@@ -48,7 +46,6 @@ namespace web_api_timeclock_server.Controllers
                     db.SaveChanges();
                     return Request.CreateResponse(HttpStatusCode.OK, work_type);
                 }
-            }
 
             return Request.CreateResponse(HttpStatusCode.NotFound);
         }
@@ -59,8 +56,22 @@ namespace web_api_timeclock_server.Controllers
         }
 
         // DELETE api/worktypes/5
-        public void Delete(int id)
+        public HttpResponseMessage Delete(Guid id, Guid user_token)
         {
+            var user = db.users.FirstOrDefault(u => u.token == user_token);
+            if (user != null)
+            {
+                var work = db.work_types.FirstOrDefault(f => f.id == id && f.user_id == user.id);
+
+                if (work != null)
+                {
+                    db.work_types.Remove(work);
+                    db.SaveChanges();
+                    return Request.CreateResponse(HttpStatusCode.OK, work);
+                }
+            }
+            return Request.CreateResponse(HttpStatusCode.NotFound, "Could not find work type or user.");
+
         }
     }
 }

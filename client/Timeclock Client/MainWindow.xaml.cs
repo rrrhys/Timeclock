@@ -202,7 +202,7 @@ namespace Timeclock_Client
         {
             if (currentEntryToken.HasValue)
             {
-                db.UpdateEntry(currentEntryToken.Value, tComments.Text);
+                db.UpdateEntry(currentEntryToken.Value, tComments.Text, user_token.Value);
 
             }
         }
@@ -293,7 +293,7 @@ namespace Timeclock_Client
         {
             if (currentEntryToken.HasValue)
             {
-                db.UpdateEntry(currentEntryToken.Value, tComments.Text);
+                db.UpdateEntry(currentEntryToken.Value, tComments.Text, user_token.Value);
 
             }
 

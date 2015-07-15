@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -14,11 +15,12 @@ namespace DataLayer
         /// Wrap a payload with a user token, for the webapi services that only like one method param.
         /// </summary>
 
-        Uri BaseAddress = new Uri("http://localhost:62159/");
+        static Uri BaseAddress = new Uri("http://vostro:62159/");
         string UserEndpoint = "api/users";
         string TokenEndpoint = "api/tokens";
         string WorkTypesEndpoint = "api/worktypes";
         string JobNumbersEndpoint = "api/jobnumbers";
+        string EntrysEndpoint = "api/entries";
         public bool CheckTokenIsValid(Guid? token)
         {
            var t = _checkTokenIsValid(token);
@@ -28,9 +30,8 @@ namespace DataLayer
 
         private async Task<bool> _checkTokenIsValid(Guid? token)
         {
-           using (var client = new HttpClient())
+           using (var client = GetHttpClient())
             {
-                client.BaseAddress = BaseAddress;
                 HttpResponseMessage response = client.GetAsync(UserEndpoint + "?token=" + token).Result;
                 if (response.IsSuccessStatusCode)
                 {
@@ -46,7 +47,33 @@ namespace DataLayer
 
         public Guid? CreateJobEntry(entry e, Guid user_token)
         {
-            throw new NotImplementedException();
+            var t = _createJobEntry(e, user_token);
+            t.Wait();
+            return t.Result;
+        }
+
+        private async Task<Guid?> _createJobEntry(entry e, Guid user_token)
+        {
+            using (var client = GetHttpClient())
+            {
+                if (e.time_to == DateTime.MinValue)
+                {
+                    e.time_to = e.time_from;
+                }
+
+                var payload = new WrapWithToken { payload = e, user_token = user_token };
+                HttpResponseMessage response = client.PostAsJsonAsync(EntrysEndpoint, payload).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<Guid>();
+                }
+                else
+                {
+
+                }
+                return null;
+            }
         }
 
         public job_numbers CreateJobNumbers(string p, Guid user_token)
@@ -60,9 +87,10 @@ namespace DataLayer
 
         private async Task<job_numbers> _createJobNumbers(string job_number, Guid user_token)
         {
-            using (var client = new HttpClient())
+
+            using (var client = GetHttpClient())
             {
-                client.BaseAddress = BaseAddress;
+               
                 job_numbers j = new job_numbers { job_number = job_number };
 
 
@@ -81,6 +109,21 @@ namespace DataLayer
             }
         }
 
+        private static HttpClient GetHttpClient()
+        {
+            var httpClientHandler = new HttpClientHandler
+                        {
+                            Proxy = new WebProxy("http://localhost:8888", false),
+                            UseProxy = true
+                        };
+
+            var client = new  HttpClient(httpClientHandler,true);
+            
+                client.BaseAddress = BaseAddress;
+
+            return client;
+        }
+
 
         public Guid? CreateUser(string email, string password)
         {
@@ -91,9 +134,8 @@ namespace DataLayer
 
         private async Task<Guid?> _createUser(string email, string password)
         {
-            using (var client = new HttpClient())
+            using (var client = GetHttpClient())
             {
-                client.BaseAddress = BaseAddress;
                 user u = new user();
                 u.email = email;
                 u.password = BCrypt.Net.BCrypt.HashPassword(password);
@@ -123,9 +165,8 @@ namespace DataLayer
 
         private async Task<work_types> _createWorkType(string work_type, Guid user_token)
         {
-            using (var client = new HttpClient())
+            using (var client = GetHttpClient())
             {
-                client.BaseAddress = BaseAddress;
                 work_types j = new work_types { work_type = work_type };
 
 
@@ -154,9 +195,8 @@ namespace DataLayer
 
         private async Task<Guid?> _getTokenForUser(string email, string password)
         {
-            using (var client = new HttpClient())
+            using (var client = GetHttpClient())
             {
-                client.BaseAddress = BaseAddress;
                 user User = new user { email = email, password = password };
                 HttpResponseMessage response = client.PostAsJsonAsync(TokenEndpoint,User).Result;
                 if (response.IsSuccessStatusCode)
@@ -177,9 +217,8 @@ namespace DataLayer
 
         private async Task<job_numbers[]> _listJobNumbers(Guid user_token)
         {
-            using (var client = new HttpClient())
+            using (var client = GetHttpClient())
             {
-                client.BaseAddress = BaseAddress;
                 HttpResponseMessage response = client.GetAsync(JobNumbersEndpoint + "?user_token=" + user_token).Result;
                 if (response.IsSuccessStatusCode)
                 {
@@ -198,9 +237,8 @@ namespace DataLayer
 
         private async Task<work_types[]> _listWorkTypes(Guid user_token)
         {
-            using (var client = new HttpClient())
+            using (var client = GetHttpClient())
             {
-                client.BaseAddress = BaseAddress;
                 HttpResponseMessage response = client.GetAsync(WorkTypesEndpoint + "?user_token=" + user_token).Result;
                 if (response.IsSuccessStatusCode)
                 {
@@ -210,9 +248,32 @@ namespace DataLayer
             }
         }
 
-        public void UpdateEntry(Guid entryToken, string comments)
+        public bool UpdateEntry(Guid entryToken, string comments, Guid user_token)
         {
-            throw new NotImplementedException();
+            var t = _updateEntry(entryToken, comments, user_token);
+            t.Wait();
+            return t.Result;
+        }
+
+        private async Task<bool> _updateEntry(Guid entryToken, string comments, Guid user_token)
+        {
+            using (var client = GetHttpClient())
+            {
+                entry E = new entry();
+                E.id = entryToken;
+                E.time_to = DateTime.Now;
+                E.comments = comments;
+               
+
+                var payload = new WrapWithToken { payload = E, user_token = user_token };
+
+                HttpResponseMessage response = client.PutAsJsonAsync("/api/entries/?entry_token=" + entryToken.ToString(), payload).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<bool>();
+                }
+            }
+            return false;
         }
     }
 }

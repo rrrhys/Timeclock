@@ -5,11 +5,15 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace web_api_timeclock_server.Controllers
 {
+    [EnableCors(origins: "http://www.jstesting.dev", headers: "*", methods: "*")]
+    
     public class UsersController : ApiController
     {
+        CWTimeclockEntities db = new CWTimeclockEntities();
         // GET api/users
         public IEnumerable<string> Get()
         {
@@ -17,19 +21,15 @@ namespace web_api_timeclock_server.Controllers
         }
 
         // GET api/users/5
-        public user Get(Guid token)
+        public user Get(Guid user_token)
         {
-            using(var db = new CWTimeclockEntities()){
-                var user = db.users.FirstOrDefault(f => f.token == token);
+                var user = db.users.FirstOrDefault(f => f.token == user_token);
                 return user;
-            }
         }
 
         // POST api/users
         public HttpResponseMessage Post([FromBody]user u)
         {
-            using (var db = new CWTimeclockEntities())
-            {
                 if (u.Valid())
                 {
                     u.token = Guid.NewGuid();
@@ -37,14 +37,13 @@ namespace web_api_timeclock_server.Controllers
                     u.name = u.email.Substring(0, u.email.IndexOf("@"));
                     db.users.Add(u);
                     db.SaveChanges();
-                    return Request.CreateResponse(HttpStatusCode.OK, u.token);
+                    return Request.CreateResponse(HttpStatusCode.OK, new { id = u.id, token = u.token });
 
                 }
                 else
                 {
                     return Request.CreateResponse((HttpStatusCode)422, "User exists in system.");
                 }
-            }
         }
 
 
@@ -54,8 +53,16 @@ namespace web_api_timeclock_server.Controllers
         }
 
         // DELETE api/users/5
-        public void Delete(int id)
+        public HttpResponseMessage Delete(Guid id, Guid user_token)
         {
+            var user = db.users.FirstOrDefault(u => u.id == id && u.token == user_token);
+            if (user != null)
+            {
+                db.users.Remove(user);
+                db.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.OK, user);
+            }
+            return Request.CreateResponse(HttpStatusCode.NotFound, "Could not find user.");
         }
     }
 }

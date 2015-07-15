@@ -11,8 +11,18 @@ namespace web_api_timeclock_server
         {
             // Web API configuration and services
 
+            // Allow CORS
+            config.EnableCors();
+
+
             // Web API routes
             config.MapHttpAttributeRoutes();
+
+            config.Routes.MapHttpRoute(
+                name: "TestRoute",
+                routeTemplate: "api/tests/{action}",
+                defaults: new { request = "info", controller = "tests" }
+            );
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
