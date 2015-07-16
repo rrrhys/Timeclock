@@ -32,18 +32,23 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.bSaveNewUser = new System.Windows.Forms.Button();
-            this.tEmail = new System.Windows.Forms.TextBox();
-            this.tPassword = new System.Windows.Forms.TextBox();
-            this.tPassword2 = new System.Windows.Forms.TextBox();
+            this.bSaveNewUser = new DevExpress.XtraEditors.SimpleButton();
+            this.tEmail = new DevExpress.XtraEditors.TextEdit();
+            this.tPassword = new DevExpress.XtraEditors.TextEdit();
+            this.tPassword2 = new DevExpress.XtraEditors.TextEdit();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.rNewUser = new System.Windows.Forms.RadioButton();
-            this.rExistingUser = new System.Windows.Forms.RadioButton();
+            this.rNewUser = new DevExpress.XtraEditors.CheckEdit();
+            this.rExistingUser = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tEmail.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tPassword.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tPassword2.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rNewUser.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rExistingUser.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -97,39 +102,42 @@
             // 
             // bSaveNewUser
             // 
-            this.bSaveNewUser.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bSaveNewUser.Appearance.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bSaveNewUser.Appearance.Options.UseFont = true;
             this.bSaveNewUser.Location = new System.Drawing.Point(332, 190);
             this.bSaveNewUser.Name = "bSaveNewUser";
             this.bSaveNewUser.Size = new System.Drawing.Size(96, 35);
             this.bSaveNewUser.TabIndex = 17;
             this.bSaveNewUser.Text = "Get Started";
-            this.bSaveNewUser.UseVisualStyleBackColor = true;
             this.bSaveNewUser.Click += new System.EventHandler(this.bSaveNewUser_Click);
             // 
             // tEmail
             // 
-            this.tEmail.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tEmail.Location = new System.Drawing.Point(112, 55);
             this.tEmail.Name = "tEmail";
-            this.tEmail.Size = new System.Drawing.Size(316, 31);
+            this.tEmail.Properties.Appearance.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tEmail.Properties.Appearance.Options.UseFont = true;
+            this.tEmail.Size = new System.Drawing.Size(316, 30);
             this.tEmail.TabIndex = 1;
             // 
             // tPassword
             // 
-            this.tPassword.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tPassword.Location = new System.Drawing.Point(112, 92);
             this.tPassword.Name = "tPassword";
-            this.tPassword.PasswordChar = '*';
-            this.tPassword.Size = new System.Drawing.Size(316, 31);
+            this.tPassword.Properties.Appearance.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tPassword.Properties.Appearance.Options.UseFont = true;
+            this.tPassword.Properties.PasswordChar = '•';
+            this.tPassword.Size = new System.Drawing.Size(316, 30);
             this.tPassword.TabIndex = 2;
             // 
             // tPassword2
             // 
-            this.tPassword2.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tPassword2.Location = new System.Drawing.Point(112, 129);
             this.tPassword2.Name = "tPassword2";
-            this.tPassword2.PasswordChar = '*';
-            this.tPassword2.Size = new System.Drawing.Size(316, 31);
+            this.tPassword2.Properties.Appearance.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tPassword2.Properties.Appearance.Options.UseFont = true;
+            this.tPassword2.Properties.PasswordChar = '•';
+            this.tPassword2.Size = new System.Drawing.Size(316, 30);
             this.tPassword2.TabIndex = 3;
             // 
             // label4
@@ -174,28 +182,25 @@
             // 
             // rNewUser
             // 
-            this.rNewUser.Appearance = System.Windows.Forms.Appearance.Button;
-            this.rNewUser.AutoSize = true;
-            this.rNewUser.Checked = true;
-            this.rNewUser.Location = new System.Drawing.Point(290, 12);
+            this.rNewUser.EditValue = true;
+            this.rNewUser.Location = new System.Drawing.Point(278, 12);
             this.rNewUser.Name = "rNewUser";
-            this.rNewUser.Size = new System.Drawing.Size(64, 23);
+            this.rNewUser.Properties.Caption = "New User";
+            this.rNewUser.Properties.CheckStyle = DevExpress.XtraEditors.Controls.CheckStyles.Radio;
+            this.rNewUser.Properties.RadioGroupIndex = 1;
+            this.rNewUser.Size = new System.Drawing.Size(75, 19);
             this.rNewUser.TabIndex = 14;
-            this.rNewUser.TabStop = true;
-            this.rNewUser.Text = "New User";
-            this.rNewUser.UseVisualStyleBackColor = true;
             this.rNewUser.CheckedChanged += new System.EventHandler(this.rNewUser_CheckedChanged);
             // 
             // rExistingUser
             // 
-            this.rExistingUser.Appearance = System.Windows.Forms.Appearance.Button;
-            this.rExistingUser.AutoSize = true;
             this.rExistingUser.Location = new System.Drawing.Point(360, 12);
             this.rExistingUser.Name = "rExistingUser";
-            this.rExistingUser.Size = new System.Drawing.Size(78, 23);
+            this.rExistingUser.Properties.Caption = "Existing User";
+            this.rExistingUser.Properties.CheckStyle = DevExpress.XtraEditors.Controls.CheckStyles.Radio;
+            this.rExistingUser.Properties.RadioGroupIndex = 1;
+            this.rExistingUser.Size = new System.Drawing.Size(79, 19);
             this.rExistingUser.TabIndex = 15;
-            this.rExistingUser.Text = "Existing User";
-            this.rExistingUser.UseVisualStyleBackColor = true;
             this.rExistingUser.CheckedChanged += new System.EventHandler(this.rExistingUser_CheckedChanged);
             // 
             // NewUser
@@ -207,13 +212,20 @@
             this.Controls.Add(this.rNewUser);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.panel1);
+            this.LookAndFeel.SkinName = "Visual Studio 2013 Light";
+            this.LookAndFeel.UseDefaultLookAndFeel = false;
             this.Name = "NewUser";
             this.Text = "Create User";
+            this.Load += new System.EventHandler(this.NewUser_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tEmail.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tPassword.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tPassword2.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rNewUser.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rExistingUser.Properties)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -223,15 +235,15 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button bSaveNewUser;
-        private System.Windows.Forms.TextBox tEmail;
-        private System.Windows.Forms.TextBox tPassword;
-        private System.Windows.Forms.TextBox tPassword2;
+        private DevExpress.XtraEditors.SimpleButton bSaveNewUser;
+        private DevExpress.XtraEditors.TextEdit tEmail;
+        private DevExpress.XtraEditors.TextEdit tPassword;
+        private DevExpress.XtraEditors.TextEdit tPassword2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.RadioButton rNewUser;
-        private System.Windows.Forms.RadioButton rExistingUser;
+        private DevExpress.XtraEditors.CheckEdit rNewUser;
+        private DevExpress.XtraEditors.CheckEdit rExistingUser;
     }
 }

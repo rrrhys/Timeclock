@@ -8,15 +8,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DevExpress.XtraEditors;
 
 namespace Timeclock_Client
 {
-    public partial class NewUser : Form
+    public partial class NewUser : DevExpress.XtraEditors.XtraForm
     {
         public Guid? user_token = null;
         TimeclockDataInterface db = new DataLayer.WebApiDataLayer();
         public NewUser()
         {
+            DevExpress.Skins.SkinManager.EnableFormSkins();
             InitializeComponent();
         }
 
@@ -105,6 +107,11 @@ namespace Timeclock_Client
         private void rNewUser_CheckedChanged(object sender, EventArgs e)
         {
             updateState();
+        }
+
+        private void NewUser_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

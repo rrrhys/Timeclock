@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,7 +16,7 @@ namespace DataLayer
         /// Wrap a payload with a user token, for the webapi services that only like one method param.
         /// </summary>
 
-        static Uri BaseAddress = new Uri("http://vostro:62159/");
+        static Uri BaseAddress = new Uri("http://54.153.140.231/");
         string UserEndpoint = "api/users";
         string TokenEndpoint = "api/tokens";
         string WorkTypesEndpoint = "api/worktypes";
@@ -32,7 +33,7 @@ namespace DataLayer
         {
            using (var client = GetHttpClient())
             {
-                HttpResponseMessage response = client.GetAsync(UserEndpoint + "?token=" + token).Result;
+                HttpResponseMessage response = client.GetAsync(UserEndpoint + "?user_token=" + token).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     user user = await response.Content.ReadAsAsync<user>();
@@ -49,10 +50,15 @@ namespace DataLayer
         {
             var t = _createJobEntry(e, user_token);
             t.Wait();
-            return t.Result;
+            if (t.Result != null)
+            {
+
+                return t.Result.id;
+            }
+            else { return null; }
         }
 
-        private async Task<Guid?> _createJobEntry(entry e, Guid user_token)
+        private async Task<entry> _createJobEntry(entry e, Guid user_token)
         {
             using (var client = GetHttpClient())
             {
@@ -66,7 +72,7 @@ namespace DataLayer
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return await response.Content.ReadAsAsync<Guid>();
+                    return await response.Content.ReadAsAsync<entry>();
                 }
                 else
                 {
@@ -129,7 +135,8 @@ namespace DataLayer
         {
             var t = _createUser(email, password);
             t.Wait();
-            return t.Result;
+            var d = t.Result;
+            return d;
         }
 
         private async Task<Guid?> _createUser(string email, string password)
@@ -143,7 +150,9 @@ namespace DataLayer
                     
                     if (response.IsSuccessStatusCode)
                     {
-                        return await response.Content.ReadAsAsync<Guid?>();
+                        dynamic content = response.Content.ReadAsAsync<ExpandoObject>().Result;
+                        var token = content.token;
+                        return new Guid(token);
                     }
                     else
                     {

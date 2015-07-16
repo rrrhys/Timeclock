@@ -10,3 +10,5 @@
 /*/*/obj/Release
 /server/packages
 /client/packages
+/server/web api timeclock server/Properties/PublishProfiles
+/client/Timeclock Client/Properties
