@@ -142,7 +142,7 @@
             this.Controls.Add(this.bFinishJob);
             this.Controls.Add(this.bStartJob);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.LookAndFeel.SkinName = "Visual Studio 2013 Dark";
+            this.LookAndFeel.SkinName = "Office 2013";
             this.LookAndFeel.UseDefaultLookAndFeel = false;
             this.Name = "MainWindow";
             this.Text = "Timeclock";

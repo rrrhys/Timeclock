@@ -183,24 +183,25 @@
             // rNewUser
             // 
             this.rNewUser.EditValue = true;
-            this.rNewUser.Location = new System.Drawing.Point(278, 12);
+            this.rNewUser.Location = new System.Drawing.Point(268, 12);
             this.rNewUser.Name = "rNewUser";
             this.rNewUser.Properties.Caption = "New User";
             this.rNewUser.Properties.CheckStyle = DevExpress.XtraEditors.Controls.CheckStyles.Radio;
             this.rNewUser.Properties.RadioGroupIndex = 1;
-            this.rNewUser.Size = new System.Drawing.Size(75, 19);
+            this.rNewUser.Size = new System.Drawing.Size(85, 19);
             this.rNewUser.TabIndex = 14;
             this.rNewUser.CheckedChanged += new System.EventHandler(this.rNewUser_CheckedChanged);
             // 
             // rExistingUser
             // 
-            this.rExistingUser.Location = new System.Drawing.Point(360, 12);
+            this.rExistingUser.Location = new System.Drawing.Point(346, 12);
             this.rExistingUser.Name = "rExistingUser";
             this.rExistingUser.Properties.Caption = "Existing User";
             this.rExistingUser.Properties.CheckStyle = DevExpress.XtraEditors.Controls.CheckStyles.Radio;
             this.rExistingUser.Properties.RadioGroupIndex = 1;
-            this.rExistingUser.Size = new System.Drawing.Size(79, 19);
+            this.rExistingUser.Size = new System.Drawing.Size(93, 19);
             this.rExistingUser.TabIndex = 15;
+            this.rExistingUser.TabStop = false;
             this.rExistingUser.CheckedChanged += new System.EventHandler(this.rExistingUser_CheckedChanged);
             // 
             // NewUser
@@ -212,7 +213,7 @@
             this.Controls.Add(this.rNewUser);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.panel1);
-            this.LookAndFeel.SkinName = "Visual Studio 2013 Light";
+            this.LookAndFeel.SkinName = "Office 2013";
             this.LookAndFeel.UseDefaultLookAndFeel = false;
             this.Name = "NewUser";
             this.Text = "Create User";
